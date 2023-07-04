@@ -219,3 +219,25 @@ nerd-fonts-ttf_package() {
 		vmove usr/share/fonts/NerdFonts/ttf
 	}
 }
+
+nerd-fonts-ttf-firacode_package() {
+  short_desc="Iconic font aggregator, collection and patcher from firacode - ttf fonts"
+  font_dirs="/usr/share/fonts/NerdFonts/ttf"
+  depends="font-util nerd-fonts-symbols-ttf"
+  pkg_install() {
+    vmove usr/share/fonts/NerdFonts/ttf/FiraCodeNerdFont*.ttf
+    vlicense LICENSE
+  }
+}
+
+nerd-fonts-ttf-cascadiacode_package() {
+  short_desc="Iconic font aggregator, collection and patcher from cascadiacode - ttf fonts"
+  font_dirs="/usr/share/fonts/NerdFonts/ttf"
+  depends="font-util nerd-fonts-symbols-ttf"
+  # Cascadia Code font in file name is named as CaskaydiaCove
+  # Ref: https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/CascadiaCode
+  pkg_install() {
+    vmove usr/share/fonts/NerdFonts/ttf/CaskaydiaCoveNerdFont*.ttf
+    vlicense LICENSE
+  }
+}
