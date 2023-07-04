@@ -72,8 +72,8 @@ do_configure() {
 	cd $wrksrc/gtk3
 	./configure --with-x-toolkit=gtk3 ${configure_args}
 
-	cd $wrksrc/pgtk
-	./configure --with-pgtk ${configure_args}
+  cd $wrksrc/pgtk
+  ./configure --with-pgtk ${configure_args}
 }
 
 do_build() {
