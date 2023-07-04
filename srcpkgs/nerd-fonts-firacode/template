@@ -1,0 +1,31 @@
+# Template file for 'nerd-fonts'
+pkgname=nerd-fonts-firacode
+version=3.2.1
+revision=1
+depends=""
+short_desc="Iconic font aggregator, collection and patcher from firacode"
+maintainer="Aditya Yadav <aadi58002@gmail.com>"
+license="MIT"
+homepage="https://nerdfonts.com"
+changelog="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/changelog.md"
+distfiles="https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/FiraCode.zip"
+checksum=4ee8fbafecfc90460399b9828270b8ece30ccbf60b3ab875d64ff77696c6e262
+
+do_install() {
+	vmkdir usr/share/fonts/NerdFontsFiracode/ttf
+	vmkdir usr/lib/NerdFontsFiracode
+
+	# get all patched fonts
+	find . -name '*.ttf' -exec install -Dm644 '{}' ${DESTDIR}/usr/share/fonts/NerdFontsFiracode/ttf \;
+
+	vlicense LICENSE
+}
+
+nerd-fonts-firacode_package() {
+	short_desc="Iconic font aggregator, collection and patcher from firacode - ttf fonts"
+	font_dirs="/usr/share/fonts/NerdFontsFiracode/ttf"
+	depends="font-util"
+	pkg_install() {
+		vmove usr/share/fonts/NerdFontsFiracode/ttf
+	}
+}
