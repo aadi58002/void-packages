@@ -4,9 +4,9 @@ version=0.40.0
 revision=1
 build_style=cmake
 configure_args=" --no-warn-unused-cli \
-    -DCMAKE_BUILD_TYPE:STRING=Release \
-    -DNO_SYSTEMD:STRING=true \
-    -G Ninja
+	-DCMAKE_BUILD_TYPE:STRING=Release \
+	-DNO_SYSTEMD:STRING=true \
+	-G Ninja
 "
 hstmkdeps="
 	cmake
@@ -54,7 +54,7 @@ distfiles="https://github.com/hyprwm/Hyprland/releases/download/v${version}/sour
 checksum=0995fe7924a60e3d81428b3fa03ab15d8065958d6285443225afbafa31d29038
 
 if [ "$XBPS_TARGET_LIBC" = "musl" ]; then
-    configure_args+=" -DCMAKE_CXX_FLAGS=\"-lexecinfo\""
+	configure_args+=" -DCMAKE_CXX_FLAGS=\"-lexecinfo\""
 	makedepends+=" libexecinfo-devel"
 	depends+=" libexecinfo"
 fi
