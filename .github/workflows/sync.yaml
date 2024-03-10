@@ -1,0 +1,25 @@
+name: Sync from upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 */4 * * *'
+
+jobs:
+  sync:
+    name: Rebase from upstream
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1000
+
+      - name: rebase
+        run: |
+          git config --global user.name 'github-actions[bot]' && \
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com' && \
+          git remote add upstream ${{ github.server_url }}/void-linux/void-packages && \
+          git pull --rebase upstream master && \
+          git push origin master --force-with-lease
+
