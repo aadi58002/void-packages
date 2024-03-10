@@ -23,3 +23,7 @@ etc/conf.*
 etc/virtual
 etc/xbps.d/custom
 etc/repo-keys
+
+
+# Adding custom github include and skip files for the ci
+!/github-actions-*
