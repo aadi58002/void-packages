@@ -27,3 +27,5 @@ etc/repo-keys
 
 # Adding custom github include and skip files for the ci
 !/github-actions-*
+!/.github-actions-exclude.txt
+!/.github-actions-include.txt
