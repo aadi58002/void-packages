@@ -113,7 +113,7 @@ jobs:
           git config --global user.name 'github-actions[bot]' && \
           git config --global user.email 'github-actions[bot]@users.noreply.github.com' && \
           # Error fix: https://stackoverflow.com/questions/62753648/rpc-failed-http-400-curl-22-the-requested-url-returned-error-400-bad-request
-          git config --global http.postBuffer 524288000 && \
+          git config --global http.postBuffer 1048576000 && \
           git init . -b binaries && \
           git add . && \
           git commit --no-verify --signoff --author "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>" -m "Deploy XBPS Binaries"
