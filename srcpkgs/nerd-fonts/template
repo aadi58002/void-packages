@@ -15,78 +15,78 @@ distfiles="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v${version}/10
  https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v${version}/LICENSE"
 
 _full_fonts=(
-	'0xProto'
-	'3270'
-	'Agave'
-	'AnonymousPro'
-	'Arimo'
-	'AurulentSansMono'
-	'BigBlueTerminal'
-	'BitstreamVeraSansMono'
-	'CascadiaCode'
-	'CascadiaMono'
-	'CodeNewRoman'
-	'ComicShannsMono'
-	'CommitMono'
-	'Cousine'
-	'D2Coding'
-	'DaddyTimeMono'
-	'DejaVuSansMono'
-	'DroidSansMono'
-	'EnvyCodeR'
-	'FantasqueSansMono'
-	'FiraCode'
-	'FiraMono'
-	'GeistMono'
-	'Go-Mono'
-	'Gohu'
-	'Hack'
-	'Hasklig'
-	'HeavyData'
-	'Hermit'
-	'iA-Writer'
-	'IBMPlexMono'
-	'Inconsolata'
-	'InconsolataGo'
-	'InconsolataLGC'
-	'IntelOneMono'
-	'Iosevka'
-	'IosevkaTerm'
-	'IosevkaTermSlab'
-	'JetBrainsMono'
-	'Lekton'
-	'LiberationMono'
-	'Lilex'
-	'MartianMono'
-	'Meslo'
-	'Monaspace'
-	'Monofur'
-	'Monoid'
-	'Mononoki'
-	'MPlus'
-	'Noto'
-	'OpenDyslexic'
-	'Overpass'
-	'ProFont'
-	'ProggyClean'
-	'Recursive'
-	'RobotoMono'
-	'ShareTechMono'
-	'SourceCodePro'
-	'SpaceMono'
-	'Terminus'
-	'Tinos'
-	'Ubuntu'
-	'UbuntuMono'
-	'UbuntuSans'
-	'VictorMono'
-	'ZedMono'
+  '0xProto'
+  '3270'
+  'Agave'
+  'AnonymousPro'
+  'Arimo'
+  'AurulentSansMono'
+  'BigBlueTerminal'
+  'BitstreamVeraSansMono'
+  'CascadiaCode'
+  'CascadiaMono'
+  'CodeNewRoman'
+  'ComicShannsMono'
+  'CommitMono'
+  'Cousine'
+  'D2Coding'
+  'DaddyTimeMono'
+  'DejaVuSansMono'
+  'DroidSansMono'
+  'EnvyCodeR'
+  'FantasqueSansMono'
+  'FiraCode'
+  'FiraMono'
+  'GeistMono'
+  'Go-Mono'
+  'Gohu'
+  'Hack'
+  'Hasklig'
+  'HeavyData'
+  'Hermit'
+  'iA-Writer'
+  'IBMPlexMono'
+  'Inconsolata'
+  'InconsolataGo'
+  'InconsolataLGC'
+  'IntelOneMono'
+  'Iosevka'
+  'IosevkaTerm'
+  'IosevkaTermSlab'
+  'JetBrainsMono'
+  'Lekton'
+  'LiberationMono'
+  'Lilex'
+  'MartianMono'
+  'Meslo'
+  'Monaspace'
+  'Monofur'
+  'Monoid'
+  'Mononoki'
+  'MPlus'
+  'Noto'
+  'OpenDyslexic'
+  'Overpass'
+  'ProFont'
+  'ProggyClean'
+  'Recursive'
+  'RobotoMono'
+  'ShareTechMono'
+  'SourceCodePro'
+  'SpaceMono'
+  'Terminus'
+  'Tinos'
+  'Ubuntu'
+  'UbuntuMono'
+  'UbuntuSans'
+  'VictorMono'
+  'ZedMono'
 )
 _symbol_font='NerdFontsSymbolsOnly'
 _fonts=("${_full_fonts[@]}" "${_symbol_font}")
 
 for f in "${_fonts[@]}"; do
-	distfiles+=" https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${f}.tar.xz>${f}-${version}.tar.xz"
+  distfiles+=" https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${f}.tar.xz>${f}-${version}.tar.xz"
 done
 
 checksum="6601e431c5c43d80dfce375147b297df0b36bb4d465948f8f2178c1da89ace76
@@ -160,60 +160,82 @@ checksum="6601e431c5c43d80dfce375147b297df0b36bb4d465948f8f2178c1da89ace76
  b7a3eee24d2b0910f3a07705f1e053221d2535f07c5a13614c4dead2620e9978"
 
 do_extract() {
-	vsrccopy 10-nerd-font-symbols.conf "${wrksrc}"
-	vsrccopy LICENSE "${wrksrc}"
-	for f in "${_fonts[@]}"; do
-		vsrcextract --no-strip-components -C "${wrksrc}/${f}" "${f}-${version}.tar.xz"
-	done
+  vsrccopy 10-nerd-font-symbols.conf "${wrksrc}"
+  vsrccopy LICENSE "${wrksrc}"
+  for f in "${_fonts[@]}"; do
+    vsrcextract --no-strip-components -C "${wrksrc}/${f}" "${f}-${version}.tar.xz"
+  done
 }
 
 do_install() {
-	vmkdir usr/share/fonts/NerdFonts/otf
-	vmkdir usr/share/fonts/NerdFonts/ttf/symbols
+  vmkdir usr/share/fonts/NerdFonts/otf
+  vmkdir usr/share/fonts/NerdFonts/ttf/symbols
 
-	for family in "${_full_fonts[@]}"; do
-		for type in otf ttf; do
-			_f_arr=( ${family}/*.${type} )
-			if [ ${#_f_arr[@]} -gt 1 ]; then
-				for f in "${_f_arr[@]}"; do
-					vinstall "${f}" 644 "/usr/share/fonts/NerdFonts/${type}"
-				done
-			fi
-		done
-	done
+  for family in "${_full_fonts[@]}"; do
+    for type in otf ttf; do
+      _f_arr=( ${family}/*.${type} )
+      if [ ${#_f_arr[@]} -gt 1 ]; then
+        for f in "${_f_arr[@]}"; do
+          vinstall "${f}" 644 "/usr/share/fonts/NerdFonts/${type}"
+        done
+      fi
+    done
+  done
 
-	for f in ${_symbol_font}/*.ttf; do
-		vinstall "${f}" 644 usr/share/fonts/NerdFonts/ttf/symbols
-	done
-	vinstall 10-nerd-font-symbols.conf 644 usr/share/fontconfig/conf.avail
+  for f in ${_symbol_font}/*.ttf; do
+    vinstall "${f}" 644 usr/share/fonts/NerdFonts/ttf/symbols
+  done
+  vinstall 10-nerd-font-symbols.conf 644 usr/share/fontconfig/conf.avail
 
-	vlicense LICENSE
+  vlicense LICENSE
 }
 
 nerd-fonts-symbols-ttf_package() {
-	short_desc+=" - TTF symbols-only font"
-	font_dirs="/usr/share/fonts/NerdFonts/ttf/symbols"
-	depends="font-util"
-	pkg_install() {
-		vmove usr/share/fonts/NerdFonts/ttf/symbols
-		vmove usr/share/fontconfig/conf.avail
-	}
+  short_desc+=" - TTF symbols-only font"
+  font_dirs="/usr/share/fonts/NerdFonts/ttf/symbols"
+  depends="font-util"
+  pkg_install() {
+    vmove usr/share/fonts/NerdFonts/ttf/symbols
+    vmove usr/share/fontconfig/conf.avail
+  }
 }
 
 nerd-fonts-otf_package() {
-	short_desc+=" - OTF fonts"
-	font_dirs="/usr/share/fonts/NerdFonts/otf"
-	depends="font-util"
-	pkg_install() {
-		vmove usr/share/fonts/NerdFonts/otf
-	}
+  short_desc+=" - OTF fonts"
+  font_dirs="/usr/share/fonts/NerdFonts/otf"
+  depends="font-util"
+  pkg_install() {
+    vmove usr/share/fonts/NerdFonts/otf
+  }
 }
 
 nerd-fonts-ttf_package() {
-	short_desc+=" - TTF fonts"
-	font_dirs="/usr/share/fonts/NerdFonts/ttf"
-	depends="font-util nerd-fonts-symbols-ttf"
-	pkg_install() {
-		vmove usr/share/fonts/NerdFonts/ttf
-	}
+  short_desc+=" - TTF fonts"
+  font_dirs="/usr/share/fonts/NerdFonts/ttf"
+  depends="font-util nerd-fonts-symbols-ttf"
+  pkg_install() {
+    vmove usr/share/fonts/NerdFonts/ttf
+  }
+}
+
+nerd-fonts-ttf-firacode_package() {
+  short_desc="Iconic font aggregator, collection and patcher from firacode - ttf fonts"
+  font_dirs="/usr/share/fonts/NerdFonts/ttf"
+  depends="font-util nerd-fonts-symbols-ttf"
+  pkg_install() {
+    vmove usr/share/fonts/NerdFonts/ttf/FiraCodeNerdFont*.ttf
+    vlicense LICENSE
+  }
+}
+
+nerd-fonts-ttf-cascadiacode_package() {
+  short_desc="Iconic font aggregator, collection and patcher from cascadiacode - ttf fonts"
+  font_dirs="/usr/share/fonts/NerdFonts/ttf"
+  depends="font-util nerd-fonts-symbols-ttf"
+  # Cascadia Code font in file name is named as CaskaydiaCove
+  # Ref: https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/CascadiaCode
+  pkg_install() {
+    vmove usr/share/fonts/NerdFonts/ttf/CaskaydiaCoveNerdFont*.ttf
+    vlicense LICENSE
+  }
 }
