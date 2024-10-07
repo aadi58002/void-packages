@@ -1,2 +1,1 @@
 linux6.6-header
-emacs
