@@ -108,6 +108,7 @@ jobs:
 
       - name: Remove files larger than 100MB
         run: |
+          cd $HOME/hostdir/binpkgs && \
           find . -type f -size +100M -exec rm -f {} +
 
       - name: Deploy
