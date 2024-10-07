@@ -115,6 +115,9 @@ jobs:
           # Error fix: https://stackoverflow.com/questions/62753648/rpc-failed-http-400-curl-22-the-requested-url-returned-error-400-bad-request
           git config --global http.postBuffer 1048576000 && \
           git init . -b binaries && \
+          git lfs install && \
+          git lfs track "*.xbps" && \
+          git add .gitattributes && \
           git add . && \
           git commit --no-verify --signoff --author "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>" -m "Deploy XBPS Binaries"
           git push -fu "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" HEAD:binaries --atomic
