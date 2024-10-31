@@ -1,6 +1,6 @@
 # Template file for 'emacs'
 pkgname=emacs
-version=30.0.91
+version=30.0.92
 revision=1
 create_wrksrc=required
 build_style=gnu-configure
@@ -30,7 +30,7 @@ license="GPL-3.0-or-later"
 homepage="http://www.gnu.org/software/emacs/"
 changelog="https://www.gnu.org/savannah-checkouts/gnu/emacs/emacs.html#Releases"
 distfiles="https://alpha.gnu.org/gnu/${pkgname}/pretest/${pkgname}-${version}.tar.xz"
-checksum=f107bb33ad634ffcffa031f923908a5a43c96b7235978dce55fea47958c50bfa
+checksum=d89287bd5a8381bb60e14aab95202377261d43a60d15dc0a61d0d662bc5626be
 nocross=yes
 nopie=yes
 
