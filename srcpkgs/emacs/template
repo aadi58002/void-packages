@@ -12,7 +12,7 @@ configure_args="--with-file-notification=inotify --with-modules
  $(vopt_with sqlite sqlite3) $(vopt_with treesitter tree-sitter)
  $(vopt_with nativecomp native-compilation=aot)"
 hostmakedepends="pkg-config tar texinfo"
-makedepends="ncurses-devel libXaw-devel libXi-devel gtk+3-devel libwebkit2gtk41-devel
+makedepends="ncurses-devel libXaw-devel libXi-devel gtk+3-devel
  dbus-devel acl-devel
  $(vopt_if jpeg libjpeg-turbo-devel) $(vopt_if tiff tiff-devel)
  $(vopt_if gif giflib-devel) $(vopt_if png libpng-devel)
@@ -20,7 +20,8 @@ makedepends="ncurses-devel libXaw-devel libXi-devel gtk+3-devel libwebkit2gtk41-
  $(vopt_if svg librsvg-devel) $(vopt_if imagemagick libmagick-devel)
  $(vopt_if xml libxml2-devel) $(vopt_if gnutls gnutls-devel)
  $(vopt_if sound alsa-lib-devel) $(vopt_if m17n m17n-lib-devel)
- $(vopt_if harfbuzz harfbuzz-devel) $(vopt_if cairo cairo-devel) $(vopt_if gmp gmp-devel)
+ $(vopt_if harfbuzz harfbuzz-devel)
+ $(vopt_if cairo cairo-devel) $(vopt_if gmp gmp-devel)
  $(vopt_if treesitter tree-sitter-devel) $(vopt_if sqlite sqlite-devel)
  $(vopt_if nativecomp libgccjit-devel)"
 depends="emacs-common-${version}_${revision}"
@@ -29,8 +30,8 @@ maintainer="Leah Neukirchen <leah@vuxu.org>"
 license="GPL-3.0-or-later"
 homepage="http://www.gnu.org/software/emacs/"
 changelog="https://www.gnu.org/savannah-checkouts/gnu/emacs/emacs.html#Releases"
-distfiles="https://alpha.gnu.org/gnu/${pkgname}/pretest/${pkgname}-${version}-rc1.tar.xz"
-checksum=d89287bd5a8381bb60e14aab95202377261d43a60d15dc0a61d0d662bc5626be
+distfiles="${GNU_SITE}/${pkgname}/${pkgname}-${version}.tar.xz"
+checksum=6ccac1ae76e6af93c6de1df175e8eb406767c23da3dd2a16aa67e3124a6f138f
 nocross=yes
 nopie=yes
 
@@ -50,77 +51,94 @@ build_options_default="cairo gif gmp gnutls harfbuzz jpeg m17n nativecomp
  png sound sqlite svg tiff treesitter webp xml xpm"
 
 post_extract() {
-  # Just configuring in different directories results in
-  # spurious emacs rebuilds with incompatible build numbers.
-  cp -a emacs-* nox
-  cp -a emacs-* x11
-  cp -a emacs-* pgtk
+	# Just configuring in different directories results in
+	# spurious emacs rebuilds with incompatible build numbers.
+	cp -a emacs-* nox
+	cp -a emacs-* x11
+	cp -a emacs-* gtk3
+	cp -a emacs-* pgtk
 }
 
 do_configure() {
-  cd $wrksrc/nox
-  ./configure --without-x $(vopt_with dbus) ${configure_args} \
-    --without-native-compilation
+	cd $wrksrc/nox
+	./configure --without-x $(vopt_with dbus) ${configure_args} \
+		--without-native-compilation
 
-  cd $wrksrc/x11
-  ./configure --with-x-toolkit=athena --without-toolkit-scroll-bars \
-    $(vopt_with dbus) --without-gconf --without-gsettings \
-    ${configure_args}
+	cd $wrksrc/x11
+	./configure --with-x-toolkit=athena --without-toolkit-scroll-bars \
+		$(vopt_with dbus) --without-gconf --without-gsettings \
+		${configure_args}
 
-  cd $wrksrc/pgtk
-  ./configure --with-pgtk ${configure_args}
+	cd $wrksrc/gtk3
+	./configure --with-x-toolkit=gtk3 ${configure_args}
+
+	cd $wrksrc/pgtk
+	./configure --with-pgtk ${configure_args}
 }
 
 do_build() {
-  make ${makejobs} -C nox V=1
-  make ${makejobs} -C x11
-  make ${makejobs} -C gtk3
-  make ${makejobs} -C pgtk
+	make ${makejobs} -C nox V=1
+	make ${makejobs} -C x11
+	make ${makejobs} -C gtk3
+	make ${makejobs} -C pgtk
 }
 
 do_install() {
-  make DESTDIR=$DESTDIR -C ${wrksrc}/nox install
-  rm -f ${DESTDIR}/usr/bin/ctags
-  rm -f ${DESTDIR}/usr/lib/systemd/user/emacs.service
-  rm -f ${DESTDIR}/usr/share/man/man1/ctags.1*
-  rm -f ${DESTDIR}/usr/share/info/info.info
-  rm -rf ${DESTDIR}/usr/share/applications
-  rm -rf ${DESTDIR}/usr/share/icons
+	make DESTDIR=$DESTDIR -C ${wrksrc}/nox install
+	rm -f ${DESTDIR}/usr/bin/ctags
+	rm -f ${DESTDIR}/usr/lib/systemd/user/emacs.service
+	rm -f ${DESTDIR}/usr/share/man/man1/ctags.1*
+	rm -f ${DESTDIR}/usr/share/info/info.info
+	rm -rf ${DESTDIR}/usr/share/applications
+	rm -rf ${DESTDIR}/usr/share/icons
 }
 
 emacs-common_package() {
-  short_desc+=" - common files"
-  replaces="emacs-common-eln>=0"
-  pkg_install() {
-    vmove usr/share/emacs
-    vmove usr/share/man
-    vmove usr/share/info
-    rm -f ${PKGDESTDIR}/usr/share/info/info.info.gz
-  }
+	short_desc+=" - common files"
+	replaces="emacs-common-eln>=0"
+	pkg_install() {
+		vmove usr/share/emacs
+		vmove usr/share/man
+		vmove usr/share/info
+		rm -f ${PKGDESTDIR}/usr/share/info/info.info.gz
+	}
 }
 
 emacs-x11_package() {
-  depends="emacs-common-${version}_${revision}"
-  provides="emacs-${version}_${revision}"
-  replaces="emacs>=0"
-  short_desc+=" - X11 version"
-  pkg_install() {
-    make DESTDIR=${PKGDESTDIR} -C ${wrksrc}/x11 install
-    rm -f ${PKGDESTDIR}/usr/bin/ctags
-    rm -rf ${PKGDESTDIR}/usr/share
-    rm -rf ${PKGDESTDIR}/usr/lib/systemd
-  }
+	depends="emacs-common-${version}_${revision}"
+	provides="emacs-${version}_${revision}"
+	replaces="emacs>=0"
+	short_desc+=" - X11 version"
+	pkg_install() {
+		make DESTDIR=${PKGDESTDIR} -C ${wrksrc}/x11 install
+		rm -f ${PKGDESTDIR}/usr/bin/ctags
+		rm -rf ${PKGDESTDIR}/usr/share
+		rm -rf ${PKGDESTDIR}/usr/lib/systemd
+	}
+}
+
+emacs-gtk3_package() {
+	depends="emacs-common-${version}_${revision} desktop-file-utils hicolor-icon-theme"
+	provides="emacs-${version}_${revision}"
+	replaces="emacs>=0"
+	short_desc+=" - GTK+3 version"
+	pkg_install() {
+		make DESTDIR=${PKGDESTDIR} -C ${wrksrc}/gtk3 install
+		rm -f ${PKGDESTDIR}/usr/bin/ctags
+		rm -rf ${PKGDESTDIR}/usr/share/{emacs,man,info}
+		rm -rf ${PKGDESTDIR}/usr/lib/systemd
+	}
 }
 
 emacs-pgtk_package() {
-  depends="emacs-common-${version}_${revision} desktop-file-utils hicolor-icon-theme"
-  provides="emacs-${version}_${revision}"
-  replaces="emacs>=0"
-  short_desc+=" - Pure GTK version"
-  pkg_install() {
-    make DESTDIR=${PKGDESTDIR} -C ${wrksrc}/pgtk install
-    rm -f ${PKGDESTDIR}/usr/bin/ctags
-    rm -rf ${PKGDESTDIR}/usr/share/{emacs,man,info}
-    rm -rf ${PKGDESTDIR}/usr/lib/systemd
-  }
+	depends="emacs-common-${version}_${revision} desktop-file-utils hicolor-icon-theme"
+	provides="emacs-${version}_${revision}"
+	replaces="emacs>=0"
+	short_desc+=" - Pure GTK version"
+	pkg_install() {
+		make DESTDIR=${PKGDESTDIR} -C ${wrksrc}/pgtk install
+		rm -f ${PKGDESTDIR}/usr/bin/ctags
+		rm -rf ${PKGDESTDIR}/usr/share/{emacs,man,info}
+		rm -rf ${PKGDESTDIR}/usr/lib/systemd
+	}
 }
