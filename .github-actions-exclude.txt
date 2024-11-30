@@ -1,1 +1,3 @@
-linux6.6-header
+nerd-fonts
+nerd-fonts-ttf-firacode_package
+nerd-fonts-ttf-cascadiacode_package
