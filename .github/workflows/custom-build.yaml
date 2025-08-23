@@ -48,7 +48,6 @@ jobs:
           # install tools needed for lints
           xbps-install -y grep curl git
 
-
       # Non x86_64: https://github.com/actions/checkout/issues/334
       - uses: actions/checkout@v4
         with:
@@ -107,16 +106,19 @@ jobs:
           xbps-rindex --privkey private.pem --sign --signedby "Aditya Yadav" $HOME/hostdir/binpkgs
           xbps-rindex --privkey private.pem --sign-pkg $HOME/hostdir/binpkgs/*.xbps
 
+      - name: Remove files larger than 100MB
+        run: |
+          cd $HOME/hostdir/binpkgs && \
+          find . -type f -size +100M -exec rm -f {} +
+
       - name: Deploy
         run: |
           cd $HOME/hostdir/binpkgs && \
           git config --global user.name 'github-actions[bot]' && \
           git config --global user.email 'github-actions[bot]@users.noreply.github.com' && \
           # Error fix: https://stackoverflow.com/questions/62753648/rpc-failed-http-400-curl-22-the-requested-url-returned-error-400-bad-request
-          git config --global http.postBuffer 524288000 && \
+          git config --global http.postBuffer 1048576000 && \
           git init . -b binaries && \
           git add . && \
           git commit --no-verify --signoff --author "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>" -m "Deploy XBPS Binaries"
           git push -fu "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" HEAD:binaries --atomic
-
-
