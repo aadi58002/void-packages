@@ -1,0 +1,22 @@
+# Template file for 'quickemu'
+pkgname=quickemu
+version=4.9.7
+revision=1
+wrksrc=${pkgname}-${version}
+depends="qemu bash coreutils grep jq procps-ng python3 cdrtools usbutils util-linux sed spice-gtk swtpm wget xdg-user-dirs xrandr zsync"
+short_desc="Quickly create and run optimised virtual machines"
+# Credit to: zenobit <zen@osowoso.xyz> for creating this template
+maintainer="Aditya Yadav <aadi58002@gmail.com>"
+license="MIT"
+homepage="https://github.com/quickemu-project/quickemu"
+distfiles="https://github.com/quickemu-project/quickemu/archive/refs/tags/${version}.tar.gz"
+checksum=38a93301a2b233bc458c62d1228d310a9c29c63c10d008c2905029ca66188606
+
+do_install() {
+	vbin ./quickemu
+	vbin ./quickget
+}
+
+post_install() {
+	vlicense LICENSE
+}
