@@ -721,7 +721,9 @@ setup_pkg() {
     fi
 
     # Setup some specific package vars.
-    wrksrc="$XBPS_BUILDDIR/${sourcepkg}-${version}"
+    if [ ! -v wrksrc ]; then
+        wrksrc="$XBPS_BUILDDIR/${sourcepkg}-${version}"
+    fi
 
     if [ "$cross" -a "$nocross" ]; then
         report_broken \

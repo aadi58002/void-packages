@@ -32,8 +32,12 @@ case "$XBPS_TARGET_MACHINE" in
 	riscv64*) export GOARCH=riscv64;;
 esac
 
+# -- Does not Work
 export GOPATH="${wrksrc}/_build-${pkgname}-xbps"
-GOSRCPATH="${GOPATH}/src/${go_import_path}"
+
+# -- Working
+#export GOPATH="/builddir/carapace/_build-${pkgname}-xbps"
+export GOSRCPATH="${GOPATH}/src/${go_import_path}"
 export CGO_CFLAGS="$CFLAGS"
 export CGO_CPPFLAGS="$CPPFLAGS"
 export CGO_CXXFLAGS="$CXXFLAGS"
